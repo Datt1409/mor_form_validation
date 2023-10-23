@@ -16,6 +16,7 @@ export default function ProcessingModal() {
     setError,
     setToastMessage,
     setShowToast,
+    avatar,
   } = useContext(ThemeContext);
 
   const handleCopy = () => {
@@ -37,12 +38,24 @@ export default function ProcessingModal() {
 
   return (
     <div className="w-[625px] h-[162px] flex flex-row items-center border border-primaryGray rounded-[10px] gap-8">
-      <div
-        className="w-32 h-32 rounded-md ml-4"
-        style={{
-          background: "linear-gradient(135deg, #9A8080 0%, #82A8C2 100%)",
-        }}
-      ></div>
+      {avatar ? (
+        <div className="w-32 h-32 rounded-md overflow-hidden ml-4">
+          <Image
+            src={avatar}
+            width={128}
+            height={128}
+            alt="avatar"
+            className="rounded-md object-cover"
+          />
+        </div>
+      ) : (
+        <div
+          className="w-32 h-32 rounded-md ml-4"
+          style={{
+            background: "linear-gradient(135deg, #9A8080 0%, #82A8C2 100%)",
+          }}
+        ></div>
+      )}
 
       {/* Info */}
       <div className="flex flex-col gap-2">
