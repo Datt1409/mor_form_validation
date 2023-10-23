@@ -284,7 +284,11 @@ export default function InfoModal() {
                   handleInputChange("description", e.target.value)
                 }
               />
-              <p className="absolute text-xs text-blur right-0 top-0">
+              <p
+                className={`${
+                  remainText === 500 ? "text-blur " : "text-black"
+                } absolute text-xs right-0 top-0`}
+              >
                 {remainText}
               </p>
             </div>
