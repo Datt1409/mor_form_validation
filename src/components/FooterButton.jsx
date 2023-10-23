@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function FooterButton({
@@ -6,6 +5,7 @@ export default function FooterButton({
   loading,
   handleCancel,
   cancelButtonRef,
+  saveButtonRef,
 }) {
   return (
     <div className="flex flex-row justify-center items-center gap-1">
@@ -19,6 +19,7 @@ export default function FooterButton({
       <button
         className="w-[52px] rounded-md text-xs text-center bg-primary text-white p-1"
         onClick={handleUpload}
+        ref={saveButtonRef}
       >
         {loading ? (
           <AiOutlineLoading3Quarters

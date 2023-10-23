@@ -17,8 +17,7 @@ const status = ["default", "processing", "completed"];
 
 export default function Home() {
   const [progressStatus, setProgressStatus] = useState(status[0]);
-  const { step, success, toastMessage, error, setError, showToast } =
-    useContext(ThemeContext);
+  const { step, success, error, showToast } = useContext(ThemeContext);
 
   return (
     <main

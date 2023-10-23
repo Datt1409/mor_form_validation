@@ -15,9 +15,12 @@ export default function InfoModal() {
   const [progress, setProgress] = useState("");
   const audioRef = useRef(null);
   const cancelButtonRef = useRef(null);
+  const saveButtonRef = useRef(null);
   const progressRef = useRef(null);
   const {
     file,
+    success,
+    error,
     setStep,
     setDuration,
     setError,
@@ -37,6 +40,8 @@ export default function InfoModal() {
     setShowGenre(false);
   };
 
+  console.log(inputValue.title, inputValue.slug);
+
   const handleInputChange = (field, value) => {
     setInputValue((prevInputValue) => ({
       ...prevInputValue,
@@ -49,6 +54,13 @@ export default function InfoModal() {
   };
 
   const handleUpload = async () => {
+    if (!inputValue.title || !inputValue.slug) {
+      setShowToast(true);
+      setError(true);
+      setToastMessage("Please fill in required fields");
+      return;
+    }
+
     setLoading(true);
     const storageRef = ref(storage, `songs/${inputValue.title}.mp3`);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -121,6 +133,17 @@ export default function InfoModal() {
       progressRef.current.style.transition = "0.1s linear";
     }
   }, [progress, progressRef.current]);
+
+  useEffect(() => {
+    if (success || error) {
+      setTimeout(() => {
+        setSuccess(false) || setError(false);
+        setShowToast(false);
+      }, 3000);
+    }
+
+    return () => clearTimeout();
+  }, [success, error]);
 
   return (
     <>
@@ -219,11 +242,11 @@ export default function InfoModal() {
 
           {/* Percentage progress bar */}
           <div
-            className={`w-[150px] rounded-xl border border-primary text-center text-white`}
+            className={`w-[150px] rounded-xl border border-primary text-center text-white invisible`}
           >
             <div
               ref={progressRef}
-              className={`w-[150px] rounded-xl border-primary bg-primary text-white text-xs text-center`}
+              className={`rounded-xl border-primary bg-primary text-white text-xs text-center`}
             >
               {progress}
             </div>
@@ -235,6 +258,7 @@ export default function InfoModal() {
             handleCancel={handleCancel}
             loading={loading}
             cancelButtonRef={cancelButtonRef}
+            saveButtonRef={saveButtonRef}
           />
         </div>
       </div>

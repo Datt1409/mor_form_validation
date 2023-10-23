@@ -38,7 +38,7 @@ export default function Input({
   }, []);
 
   const statusClassName = useMemo(() => {
-    if (error) {
+    if (error && required && !value) {
       return "border-primaryRed";
     }
 
@@ -57,7 +57,7 @@ export default function Input({
   }, [error, isFocus, inputValue, color]);
 
   const labelStatusClassName = useMemo(() => {
-    if (error) {
+    if (error && required && !value) {
       return "text-primaryRed";
     }
     if (isFocus) {
