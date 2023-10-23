@@ -14,12 +14,14 @@ export default function InfoModal() {
   const [showGenre, setShowGenre] = useState(false);
   const [progress, setProgress] = useState("");
   const audioRef = useRef(null);
+  const [remainText, setRemainText] = useState(500);
   const cancelButtonRef = useRef(null);
   const saveButtonRef = useRef(null);
   const progressRef = useRef(null);
+  const listGenreRef = useRef(null);
+
   const {
     file,
-    success,
     error,
     setStep,
     setDuration,
@@ -33,6 +35,12 @@ export default function InfoModal() {
     setSelectGenre,
     setShowToast,
     setShowPercentage,
+    showToast,
+    titleMessage,
+    slugMessage,
+    setTitleMessage,
+    setSlugMessage,
+    setIsFocus,
   } = useContext(ThemeContext);
 
   const handleSelectGenre = (value) => {
@@ -40,9 +48,33 @@ export default function InfoModal() {
     setShowGenre(false);
   };
 
-  console.log(inputValue.title, inputValue.slug);
-
   const handleInputChange = (field, value) => {
+    setIsFocus(true);
+    if (field === "title") {
+      if (!value) {
+        setError(true);
+        setTitleMessage("This field is required");
+      } else {
+        setError(false);
+        setTitleMessage(null);
+      }
+    }
+
+    if (field === "slug") {
+      if (!value) {
+        setError(true);
+        setSlugMessage("This field is required");
+      } else {
+        setError(false);
+        setSlugMessage(null);
+      }
+    }
+
+    if (field === "description") {
+      const MAX_DESCRIPTION_LENGTH = 500;
+      setRemainText(MAX_DESCRIPTION_LENGTH - value.length);
+    }
+
     setInputValue((prevInputValue) => ({
       ...prevInputValue,
       [field]: value,
@@ -135,15 +167,28 @@ export default function InfoModal() {
   }, [progress, progressRef.current]);
 
   useEffect(() => {
-    if (success || error) {
+    if (showToast) {
       setTimeout(() => {
-        setSuccess(false) || setError(false);
         setShowToast(false);
-      }, 3000);
+      }, 8000);
     }
-
     return () => clearTimeout();
-  }, [success, error]);
+  }, [showToast]);
+
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (
+        listGenreRef.current &&
+        !listGenreRef.current.contains(e.target) &&
+        e.target !== listGenreRef.current
+      ) {
+        setShowGenre(false);
+      }
+    };
+
+    document.addEventListener("mousedown", clickOutside);
+    return () => document.removeEventListener("mousedown", clickOutside);
+  }, []);
 
   return (
     <>
@@ -152,35 +197,40 @@ export default function InfoModal() {
           {/* Avatar box */}
           <Avatar />
           {/* Info box */}
-          <div className="w-[373px] flex flex-col mt-8">
-            <Input
-              id="title"
-              label="Title"
-              value={inputValue.title}
-              placeholder="placeholder"
-              required
-              type="text"
-              className="mb-4"
-              onChange={(e) => handleInputChange("title", e.target.value)}
-            />
+          <div className="w-[373px] flex flex-col justify-between mt-8">
+            <div className="mb-4">
+              <Input
+                id="title"
+                label="Title"
+                value={inputValue.title}
+                placeholder="placeholder"
+                required
+                type="text"
+                className=""
+                onChange={(e) => handleInputChange("title", e.target.value)}
+              />
+            </div>
             {/* Song info */}
             <div className="flex flex-row gap-16 mb-4">
               <SongInfo />
             </div>
             <audio ref={audioRef} src="" hidden />
             {/* Slug */}
-            <Input
-              label="Slug"
-              value={inputValue.slug}
-              required
-              placeholder="placeholder"
-              type="text"
-              className="mb-3"
-              onChange={(e) => handleInputChange("slug", e.target.value)}
-            />
+            <div className="mb-4">
+              <Input
+                id="slug"
+                label="Slug"
+                value={inputValue.slug}
+                required
+                placeholder="placeholder"
+                type="text"
+                className=""
+                onChange={(e) => handleInputChange("slug", e.target.value)}
+              />
+            </div>
 
             {/* Genre dropdown */}
-            <div className="flex flex-row justify-center items-center mb-3 gap-3">
+            <div className="flex flex-row justify-center items-center mb-4 gap-3">
               <div className="flex flex-col">
                 <p className="text-xs text-primaryBlack mb-1">Genre</p>
                 <div
@@ -197,7 +247,10 @@ export default function InfoModal() {
                     <BsChevronUp size={16} className="absolute right-2 top-2" />
                   )}
                   {showGenre && (
-                    <ul className="w-full h-[130px] overflow-y-scroll text-black border border-primaryGray bg-white absolute left-0 top-10 z-10 rounded">
+                    <ul
+                      ref={listGenreRef}
+                      className="w-full h-[130px] text-black border overflow-y-scroll scrollbar border-primaryGray bg-white absolute left-0 top-10 z-10 rounded"
+                    >
                       {genres.map((genre) => (
                         <li
                           key={genre}
@@ -222,6 +275,8 @@ export default function InfoModal() {
             {/* Description */}
             <div className="relative">
               <Input
+                type="textarea"
+                id="description"
                 label="Description"
                 value={inputValue.description}
                 className="h-[84px]"
@@ -229,7 +284,9 @@ export default function InfoModal() {
                   handleInputChange("description", e.target.value)
                 }
               />
-              <p className="absolute text-xs text-blur right-0 top-0">500</p>
+              <p className="absolute text-xs text-blur right-0 top-0">
+                {remainText}
+              </p>
             </div>
             {/* Button */}
           </div>

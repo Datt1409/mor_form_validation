@@ -23,7 +23,7 @@ export default function Home() {
     <main
       className={`flex flex-col h-screen w-screen items-center relative gap-10 ${poppins.className}`}
     >
-      <h1 className="font-bold capitalize text-[#0f0f0f] text-4xl mt-10">
+      <h1 className="font-bold capitalize text-[#0f0f0f] text-4xl mt-8">
         Upload your music
       </h1>
       <ProgressBar

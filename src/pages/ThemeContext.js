@@ -14,7 +14,10 @@ export default function ThemeProvider({ children }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [showPercentage, setShowPercentage] = useState(false);
+  const [titleMessage, setTitleMessage] = useState("");
+  const [slugMessage, setSlugMessage] = useState("");
   const [selectGenre, setSelectGenre] = useState("");
+  const [isFocus, setIsFocus] = useState(false);
   const [inputValue, setInputValue] = useState({
     title: "",
     slug: "",
@@ -51,6 +54,13 @@ export default function ThemeProvider({ children }) {
         setShowToast,
         showPercentage,
         setShowPercentage,
+        titleMessage,
+        setTitleMessage,
+        slugMessage,
+        setSlugMessage,
+        isFocus,
+        setIsFocus,
+        setError,
       }}
     >
       {children}

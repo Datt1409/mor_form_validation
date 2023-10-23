@@ -28,7 +28,7 @@ export default function ToastMessage() {
     <>
       <div
         style={{ background: `${backgroundStyle}` }}
-        className={`${ToastStyle} w-[326px] h-10 border flex justify-between items-center rounded-md absolute bottom-[50%] right-10 show-toast`}
+        className={`${ToastStyle} w-[326px] h-10 border flex justify-between items-center rounded-md absolute top-10 right-10 show-toast`}
       >
         <div className="flex items-center gap-2 ml-2">
           <AiFillCheckCircle size={24} />

@@ -16,12 +16,19 @@ export default function Input({
   handleCopy,
   id,
 }) {
-  const [isFocus, setIsFocus] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const inputRef = useRef();
   const inputContainerRef = useRef();
   const labelRef = useRef();
-  const { error, setError, setToastMessage } = useContext(ThemeContext);
+  const {
+    error,
+    setError,
+    titleMessage,
+    setTitleMessage,
+    slugMessage,
+    setSlugMessage,
+    isFocus,
+    setIsFocus,
+  } = useContext(ThemeContext);
 
   const maxCharacter = useMemo(() => {
     if (label === "Title") {
@@ -42,10 +49,6 @@ export default function Input({
       return "border-primaryRed";
     }
 
-    if (isFocus) {
-      return `border-${color}`;
-    }
-
     if (type === "disabled") {
       return "placeholder:text-link placeholder:text-ellipsis";
     }
@@ -54,31 +57,25 @@ export default function Input({
       return "border-dark";
     }
     return "";
-  }, [error, isFocus, inputValue, color]);
-
-  const labelStatusClassName = useMemo(() => {
-    if (error && required && !value) {
-      return "text-primaryRed";
-    }
-    if (isFocus) {
-      return `text-${color}`;
-    }
-    if (!!value) {
-      return "text-dark";
-    }
-    return "";
   }, [error, isFocus, value, color]);
 
   const handleBlur = () => {
     setIsFocus(false);
-    if (!isFocus && required && !value) {
+    if (id === "title" && !isFocus && required && !value) {
       inputRef.current.style.border = "1px solid #ff4040";
-      labelRef.current.style.color = "#ff4040";
+      setError(true);
+      setTitleMessage("This field is required");
     }
-
-    if (!isFocus && value) {
+    if (id === "slug" && !isFocus && required && !value) {
+      inputRef.current.style.border = "1px solid #ff4040";
+      setError(true);
+      setSlugMessage("This field is required");
+    }
+    if (id === "title" && !isFocus && required && value) {
       inputRef.current.style.border = "1px solid black";
-      labelRef.current.style.color = "#000";
+    }
+    if (id === "slug" && !isFocus && required && value) {
+      inputRef.current.style.border = "1px solid black";
     }
   };
 
@@ -97,11 +94,11 @@ export default function Input({
   }, []);
 
   return (
-    <div className={`w-92 flex flex-col`}>
+    <div className={`w-92 flex flex-col gap-1`}>
       {/* Label */}
       <div
         ref={labelRef}
-        className={`${labelStatusClassName} relative text-primaryBlack mb-1 text-xs cursor-pointer`}
+        className="text-primaryBlack relative text-xs cursor-pointer"
         onClick={() => {
           if (!disabled) {
             setIsFocus(true);
@@ -120,25 +117,39 @@ export default function Input({
       </div>
 
       {/* Input */}
-      <div
-        ref={inputContainerRef}
-        className={`w-full gap-3 relative ${className}`}
-      >
-        <input
-          id={id}
-          ref={inputRef}
-          type="text"
-          value={value}
-          placeholder={placeholder}
-          className={`${statusClassName}
+      <div ref={inputContainerRef} className={`w-full relative ${className}`}>
+        {type === "textarea" ? (
+          <textarea
+            id={id}
+            ref={inputRef}
+            value={value}
+            placeholder={placeholder}
+            className={`${statusClassName}
+              ${disabled ? "bg-disabled text-dark" : ""}
+              border w-full h-full  border-primaryGray py-2 px-3 rounded-md placeholder:text-blur text-xs`}
+            maxLength={500} // Set your desired character limit
+            onChange={onChange}
+            disabled={disabled}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => handleBlur()}
+          />
+        ) : (
+          <input
+            id={id}
+            ref={inputRef}
+            type="text"
+            value={value}
+            placeholder={placeholder}
+            className={`${statusClassName}
               ${disabled ? "bg-disabled text-dark" : ""}
            border w-full h-full  border-primaryGray py-2 pr-14 pl-3 rounded-md placeholder:text-blur text-xs`}
-          maxLength={maxCharacter}
-          onChange={onChange}
-          disabled={disabled}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => handleBlur()}
-        />
+            maxLength={maxCharacter}
+            onChange={onChange}
+            disabled={disabled}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => handleBlur()}
+          />
+        )}
 
         {type === "disabled" && copyLink && (
           <FaCopy
@@ -149,9 +160,23 @@ export default function Input({
         )}
       </div>
 
-      {/* {errorMessage && (
-        <p className="text-primaryRed text-xs">{errorMessage}</p>
-      )} */}
+      {
+        <p
+          className={`${
+            error && id === "title" ? "text-xs text-primaryRed" : "hidden"
+          }`}
+        >
+          {titleMessage}
+        </p>
+      }
+
+      <p
+        className={`${
+          error && id === "slug" ? "text-xs text-primaryRed" : "hidden"
+        }`}
+      >
+        {slugMessage}
+      </p>
     </div>
   );
 }

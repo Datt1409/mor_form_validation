@@ -8,9 +8,7 @@ import { formatTitle } from "@/utils";
 export default function ProcessingModal() {
   const {
     downloadUrl,
-    success,
-    error,
-    file,
+    showToast,
     duration,
     inputValue,
     selectGenre,
@@ -28,15 +26,14 @@ export default function ProcessingModal() {
   };
 
   useEffect(() => {
-    if (success || error) {
+    if (showToast) {
       setTimeout(() => {
         setSuccess(false) || setError(false);
         setShowToast(false);
-      }, 3000);
+      }, 8000);
     }
-
     return () => clearTimeout();
-  }, [success, error]);
+  }, [showToast]);
 
   return (
     <div className="w-[625px] h-[162px] flex flex-row items-center border border-primaryGray rounded-[10px] gap-8">

@@ -1,9 +1,10 @@
 import { ThemeContext } from "@/pages/ThemeContext";
+import Image from "next/image";
 import React, { useContext, useRef } from "react";
 import { FaCamera } from "react-icons/fa";
 
 export default function Avatar() {
-  const { avatar } = useContext(ThemeContext);
+  const { avatar, setAvatar } = useContext(ThemeContext);
   const imageInputRef = useRef(null);
 
   const onSelectAvatar = (e) => {
