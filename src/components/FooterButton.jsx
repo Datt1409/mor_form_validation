@@ -1,13 +1,18 @@
-import { ThemeContext } from "@/pages/ThemeContext";
-import React, { useContext } from "react";
+import { useRef } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-export default function FooterButton({ handleUpload, loading, handleCancel }) {
+export default function FooterButton({
+  handleUpload,
+  loading,
+  handleCancel,
+  cancelButtonRef,
+}) {
   return (
     <div className="flex flex-row justify-center items-center gap-1">
       <button
         className="w-[52px] rounded-md text-xs p-1"
         onClick={handleCancel}
+        ref={cancelButtonRef}
       >
         Cancel
       </button>

@@ -14,6 +14,7 @@ export default function InfoModal() {
   const [showGenre, setShowGenre] = useState(false);
   const [progress, setProgress] = useState("");
   const audioRef = useRef(null);
+  const cancelButtonRef = useRef(null);
   const progressRef = useRef(null);
   const {
     file,
@@ -63,7 +64,7 @@ export default function InfoModal() {
         setProgress(progress.toFixed(2) + "%");
         switch (snapshot.state) {
           case "paused":
-            console.log("Upload is paused");
+            if (cancelButtonRef.current?.click()) uploadTask.cancel();
             break;
           case "running":
             console.log("Upload is running");
@@ -217,7 +218,9 @@ export default function InfoModal() {
           </p>
 
           {/* Percentage progress bar */}
-          <div className="w-[150px] rounded-xl border border-primary text-center text-white hidden">
+          <div
+            className={`w-[150px] rounded-xl border border-primary text-center text-white`}
+          >
             <div
               ref={progressRef}
               className={`w-[150px] rounded-xl border-primary bg-primary text-white text-xs text-center`}
@@ -231,6 +234,7 @@ export default function InfoModal() {
             handleUpload={handleUpload}
             handleCancel={handleCancel}
             loading={loading}
+            cancelButtonRef={cancelButtonRef}
           />
         </div>
       </div>
