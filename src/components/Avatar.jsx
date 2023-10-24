@@ -25,14 +25,17 @@ export default function Avatar() {
       {" "}
       {avatar ? (
         <>
-          <div className="w-[200px] h-[200px] mt-8  object-cover rounded-md relative overflow-hidden">
-            <Image
+          <div
+            className="w-[200px] h-[200px] mt-8 bg-contain rounded-md relative "
+            style={{ background: `url(${avatar}) no-repeat center center ` }}
+          >
+            {/* <Image
               src={avatar}
               width={200}
               height={200}
               alt="avatar"
               className="object-cover rounded-md "
-            />
+            /> */}
             <button
               className="w-[112px] h-[20px] bg-[#F6F6F6] text-[10px] text-center left-11 bottom-3 absolute z-10 rounded-md block"
               onClick={() => imageInputRef.current?.click()}
