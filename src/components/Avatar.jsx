@@ -25,7 +25,7 @@ export default function Avatar() {
       {" "}
       {avatar ? (
         <>
-          <div className="w-[200px] h-[200px] mt-8 rounded-md relative overflow-hidden">
+          <div className="w-[200px] h-[200px] mt-8  object-cover rounded-md relative overflow-hidden">
             <Image
               src={avatar}
               width={200}

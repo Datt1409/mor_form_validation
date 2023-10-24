@@ -13,9 +13,8 @@ export default function ThemeProvider({ children }) {
   const [showToast, setShowToast] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showPercentage, setShowPercentage] = useState(false);
-  const [titleMessage, setTitleMessage] = useState("");
-  const [slugMessage, setSlugMessage] = useState("");
   const [selectGenre, setSelectGenre] = useState("");
   const [isFocus, setIsFocus] = useState(false);
   const [inputValue, setInputValue] = useState({
@@ -54,13 +53,11 @@ export default function ThemeProvider({ children }) {
         setShowToast,
         showPercentage,
         setShowPercentage,
-        titleMessage,
-        setTitleMessage,
-        slugMessage,
-        setSlugMessage,
         isFocus,
         setIsFocus,
         setError,
+        errorMessage,
+        setErrorMessage,
       }}
     >
       {children}

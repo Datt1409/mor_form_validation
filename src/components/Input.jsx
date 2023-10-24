@@ -15,34 +15,14 @@ export default function Input({
   value,
   handleCopy,
   id,
+  maxLength,
+  error,
+  errorMessage,
 }) {
   const inputRef = useRef();
   const inputContainerRef = useRef();
   const labelRef = useRef();
-  const {
-    error,
-    setError,
-    titleMessage,
-    setTitleMessage,
-    slugMessage,
-    setSlugMessage,
-    isFocus,
-    setIsFocus,
-  } = useContext(ThemeContext);
-
-  const maxCharacter = useMemo(() => {
-    if (label === "Title") {
-      return 100;
-    }
-
-    if (label === "Slug") {
-      return 100;
-    }
-
-    if (label === "Description") {
-      return 500;
-    }
-  }, []);
+  const { isFocus, setIsFocus} = useContext(ThemeContext);
 
   const statusClassName = useMemo(() => {
     if (error && required && !value) {
@@ -61,20 +41,11 @@ export default function Input({
 
   const handleBlur = () => {
     setIsFocus(false);
-    if (id === "title" && !isFocus && required && !value) {
+    if (!isFocus && required && !value) {
       inputRef.current.style.border = "1px solid #ff4040";
-      setError(true);
-      setTitleMessage("This field is required");
     }
-    if (id === "slug" && !isFocus && required && !value) {
-      inputRef.current.style.border = "1px solid #ff4040";
-      setError(true);
-      setSlugMessage("This field is required");
-    }
-    if (id === "title" && !isFocus && required && value) {
-      inputRef.current.style.border = "1px solid black";
-    }
-    if (id === "slug" && !isFocus && required && value) {
+
+    if (!isFocus && value) {
       inputRef.current.style.border = "1px solid black";
     }
   };
@@ -127,9 +98,10 @@ export default function Input({
             className={`${statusClassName}
               ${disabled ? "bg-disabled text-dark" : ""}
               border w-full h-full  border-primaryGray py-2 px-3 rounded-md placeholder:text-blur text-xs`}
-            maxLength={500} // Set your desired character limit
+            maxLength={maxLength}
             onChange={onChange}
             disabled={disabled}
+            required={required}
             onFocus={() => setIsFocus(true)}
             onBlur={() => handleBlur()}
           />
@@ -143,9 +115,10 @@ export default function Input({
             className={`${statusClassName}
               ${disabled ? "bg-disabled text-dark" : ""}
            border w-full h-full  border-primaryGray py-2 pr-14 pl-3 rounded-md placeholder:text-blur text-xs`}
-            maxLength={maxCharacter}
+            maxLength={maxLength}
             onChange={onChange}
             disabled={disabled}
+            required={required}
             onFocus={() => setIsFocus(true)}
             onBlur={() => handleBlur()}
           />
@@ -160,22 +133,8 @@ export default function Input({
         )}
       </div>
 
-      {
-        <p
-          className={`${
-            error && id === "title" ? "text-xs text-primaryRed" : "hidden"
-          }`}
-        >
-          {titleMessage}
-        </p>
-      }
-
-      <p
-        className={`${
-          error && id === "slug" ? "text-xs text-primaryRed" : "hidden"
-        }`}
-      >
-        {slugMessage}
+      <p className={`${error ? "text-xs text-primaryRed" : "hidden"}`}>
+        {errorMessage}
       </p>
     </div>
   );

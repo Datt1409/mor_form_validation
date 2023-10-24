@@ -22,10 +22,10 @@ export default function InfoModal() {
 
   const {
     file,
-    error,
+    setError,
+    setErrorMessage,
     setStep,
     setDuration,
-    setError,
     setToastMessage,
     setSuccess,
     setDownloadUrl,
@@ -36,10 +36,6 @@ export default function InfoModal() {
     setShowToast,
     setShowPercentage,
     showToast,
-    titleMessage,
-    slugMessage,
-    setTitleMessage,
-    setSlugMessage,
     setIsFocus,
   } = useContext(ThemeContext);
 
@@ -53,20 +49,20 @@ export default function InfoModal() {
     if (field === "title") {
       if (!value) {
         setError(true);
-        setTitleMessage("This field is required");
+        setErrorMessage("This field is required");
       } else {
         setError(false);
-        setTitleMessage(null);
+        setErrorMessage(null);
       }
     }
 
     if (field === "slug") {
       if (!value) {
         setError(true);
-        setSlugMessage("This field is required");
+        setErrorMessage("This field is required");
       } else {
         setError(false);
-        setSlugMessage(null);
+        setErrorMessage(null);
       }
     }
 
@@ -200,7 +196,6 @@ export default function InfoModal() {
           <div className="w-[373px] flex flex-col justify-between mt-8">
             <div className="mb-4">
               <Input
-                id="title"
                 label="Title"
                 value={inputValue.title}
                 placeholder="placeholder"
@@ -208,6 +203,8 @@ export default function InfoModal() {
                 type="text"
                 className=""
                 onChange={(e) => handleInputChange("title", e.target.value)}
+                error={!inputValue.title}
+                errorMessage="This field is required"
               />
             </div>
             {/* Song info */}
@@ -218,7 +215,6 @@ export default function InfoModal() {
             {/* Slug */}
             <div className="mb-4">
               <Input
-                id="slug"
                 label="Slug"
                 value={inputValue.slug}
                 required
@@ -226,6 +222,8 @@ export default function InfoModal() {
                 type="text"
                 className=""
                 onChange={(e) => handleInputChange("slug", e.target.value)}
+                error={!inputValue.slug}
+                errorMessage="This field is required"
               />
             </div>
 
